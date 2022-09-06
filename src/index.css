@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+#id
+{
+    height: 100vh;
+    width: 100rem;
+    margin: 0 auto;
+    max-width: 100%;
+}
+body
+{
+    background-color: rgb(32, 32, 32);
+    color: #fff;
+}
+
+.buttonCustom,.buttonAccept,.buttonCancel
+{
+   padding: .5rem 1.1rem;
+   font-weight: bold;
+   border-radius: .5rem;
+   cursor: pointer;
+   transition: ease-in-out 200ms;
+   text-transform: uppercase;
+}
+.buttonAccept:hover
+{
+    filter: brightness(120%);
+}
+.buttonAccept
+{
+    background-color: rgb(38, 255, 183);
+}
+.buttonCancel
+{
+    background-color: rgb(243, 87, 113);
+}
+
