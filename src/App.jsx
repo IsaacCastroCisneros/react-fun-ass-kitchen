@@ -11,9 +11,10 @@ function App()
 {
   const[recipes,setRecipes]=useState([]);
   const[selectedRecipeIndex,setSelectedRecipeIndex]=useState({});
+  const[searchParams,setSearchParams]=useState('');
 
   let selectedRecipe = recipes[selectedRecipeIndex]
-
+  
   useEffect(()=>
   {
     const locals = localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -29,7 +30,9 @@ function App()
     createRecipe,
     removeRecipe,
     findRecipeIndex,
-    updateRecipe
+    updateRecipe,
+    search,
+    setSelectedRecipeIndex
   }
 
   function createRecipe()
@@ -69,17 +72,24 @@ function App()
      newRecipes[index]=recipe;
      setRecipes(newRecipes)
   }
+  function search(params)
+  {
+    setSearchParams(params)
+  }
 
   return (
     <appContext.Provider value={contextValues}>
       <Header />
       <main className="flex relative items-start pt-[12rem] px-[1rem] pb-[2rem]">
         <div className="flex-1">
-          {recipes.map((recipe) => {
-            return <Recipe key={recipe.id} {...recipe} />;
-          })}
+          {
+            recipes.map((recipe) => 
+            {
+              if(!recipe.name.includes(searchParams))return
+              return <Recipe key={recipe.id} {...recipe} />
+            })
+          }
         </div>
-        <button onClick={()=>setSelectedRecipeIndex(undefined)}>&times;</button>
         {selectedRecipe && <EditRecipe selectedRecipe={selectedRecipe} />} 
       </main>
     </appContext.Provider>
@@ -89,24 +99,36 @@ function App()
 
 function Header({}) 
 {
-  const{createRecipe}=useContext(appContext)
+  const{createRecipe,search}=useContext(appContext)
 
   return (
     <header className="w-[100%] bg-slate-600 fixed z-[500] shadow-[.5rem_0rem_1rem_#000]">
-    <span className="block text-white font-bold py-[.5rem] px-[1rem] text- text-center uppercase bg-gradient-to-b from-pink-300 to-pink-600">
+      <span className="block text-white font-bold py-[.5rem] px-[1rem] text- text-center uppercase bg-gradient-to-b from-pink-300 to-pink-600">
         fun ass kitchen
-    </span>
+      </span>
       <section className="flex p-[1rem] w-[100rem] gap-x-[4rem] gap-y-[1rem] flex-wrap max-w-[100%] my-0 mx-auto">
-        <button className="buttonAccept flex-[4] min-w-[8rem] uppercase"
-         onClick={createRecipe}
-        >add recipe</button>
-        <form className="flex flex-[2] items-center gap-[1rem] p-[.5rem] rounded-[.5rem] bg-zinc-800" action="">
+        <button
+          className="buttonAccept flex-[4] min-w-[8rem] uppercase"
+          onClick={createRecipe}
+        >
+          add recipe
+        </button>
+        <form
+          className="flex flex-[2] items-center gap-[1rem] p-[.5rem] rounded-[.5rem] bg-zinc-800"
+          action=""
+        >
           <i class="fa-solid fa-magnifying-glass"></i>
-          <input className="placeholder:text-gray-400 outline-none bg-transparent" type="text" placeholder="search something" />
+          <input
+            className="placeholder:text-gray-400 outline-none bg-transparent"
+            type="text"
+            placeholder="search something"
+            onSubmit={e=>e.preventDefault()}
+            onChange={e=>search(e.target.value)}
+          />
         </form>
       </section>
-   </header>
-   );
+    </header>
+  );
 }
   
 

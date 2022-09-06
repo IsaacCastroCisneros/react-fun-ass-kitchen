@@ -3,9 +3,10 @@ import { appContext } from '../App'
 
 export default function EditRecipe({selectedRecipe}) 
 {
-  const{updateRecipe}=useContext(appContext)
+  const{updateRecipe,setSelectedRecipeIndex}=useContext(appContext)
   const{
-   id
+   id,
+   name,
   }=selectedRecipe
 
   function changeRecipe(change)
@@ -14,14 +15,20 @@ export default function EditRecipe({selectedRecipe})
   }
 
   return (
-    <div className='block flex-1'>
-      <div className=''>
-         <div className='block text-black'>
-            <input type="text" name='name'
-             onChange={e=>changeRecipe({name:e.target.value})}
-            />
-         </div>
+    <div className="block flex-1">
+      <div className="fixed">
+        <button onClick={() => setSelectedRecipeIndex(undefined)}>
+          &times;
+        </button>
+        <div className="block text-black">
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={(e) => changeRecipe({name: e.target.value})}
+          />
+        </div>
       </div>
     </div>
-  )
+  );
 }
