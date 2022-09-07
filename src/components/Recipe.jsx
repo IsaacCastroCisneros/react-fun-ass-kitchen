@@ -5,7 +5,7 @@ import People from './People';
 
 export default function Recipe(props) 
 {
-  const{removeRecipe,findRecipeIndex}=useContext(appContext);
+  const{removeRecipe,findRecipeById}=useContext(appContext);
 
   const{
     id,
@@ -18,16 +18,16 @@ export default function Recipe(props)
   }=props
 
   return (
-    <section className="flex border-[1px] border-gray-400 bg-slate-600  p-[2rem] rounded-[.5rem] flex-col gap-[.8rem] w-[100%] text-[1.2rem] mb-[1rem]">
+    <section className="flex border-[1px] border-gray-400 bg-slate-600 p-[2rem] rounded-[.5rem] flex-col gap-[.8rem] w-[100%] text-[1.2rem] mb-[1rem]">
       <div className="flex flex-1 justify-between">
         <h1 className="block text-[2rem] font-bold uppercase">{name}</h1>
         <div className="flex gap-[1rem]">
-          <button className="buttonAccept"
-           onClick={()=>findRecipeIndex(id)}
-          >edit</button>
-          <button className="buttonCancel"
-           onClick={()=>removeRecipe(id)}
-          >delete</button>
+          <button className="buttonAccept" onClick={() => findRecipeById(id)}>
+            edit
+          </button>
+          <button className="buttonCancel" onClick={() => removeRecipe(id)}>
+            delete
+          </button>
         </div>
       </div>
       <span>
@@ -51,29 +51,17 @@ export default function Recipe(props)
         ></textarea>
       </div>
       <strong>Ingredients: </strong>
-      {
-        ingredients.map(ingredient=>
-          {
-            return(
-              <Ingredient
-               key={ingredient.id}
-               {...ingredient}
-              />
-            )
-          })
-      }
-      <strong>By:</strong>
-      {
-        people.map(pip=>
-          {
-            return(
-              <People
-               key={pip.id}
-               {...pip}
-              />
-            )
-          })
-      }
+      <div className="flex flex-col gap-[1rem] max-h-[30rem] overflow-y-auto">
+        {ingredients.map((ingredient) => {
+          return <Ingredient key={ingredient.id} {...ingredient} />;
+        })}
+      </div>
+      <div className="flex flex-col gap-[1rem] max-h-[30rem] overflow-y-auto">
+        <strong>By:</strong>
+        {people.map((pip) => {
+          return <People key={pip.id} {...pip} />;
+        })}
+      </div>
     </section>
   );
 }

@@ -28,6 +28,9 @@ body
    border-radius: .5rem;
    cursor: pointer;
    transition: ease-in-out 200ms;
+   display: flex;
+   align-items: center;
+   justify-content: center;
    text-transform: uppercase;
 }
 .buttonAccept:hover
@@ -42,4 +45,12 @@ body
 {
     background-color: rgb(243, 87, 113);
 }
+.input
+{
+    border-radius: .5rem;
+    padding: .5rem;
+    color: #fff;
+    background-color: #27272a;
+}
+
 

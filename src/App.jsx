@@ -10,11 +10,11 @@ const LOCAL_STORAGE_KEY = 'recipes';
 function App() 
 {
   const[recipes,setRecipes]=useState([]);
-  const[selectedRecipeIndex,setSelectedRecipeIndex]=useState({});
+  const[selectedRecipeId,setSelectedRecipeId]=useState({});
   const[searchParams,setSearchParams]=useState('');
 
-  let selectedRecipe = recipes[selectedRecipeIndex]
-  
+  let selectedRecipe = recipes.find(recipe=>recipe.id===selectedRecipeId)
+
   useEffect(()=>
   {
     const locals = localStorage.getItem(LOCAL_STORAGE_KEY)
@@ -29,10 +29,10 @@ function App()
   {
     createRecipe,
     removeRecipe,
-    findRecipeIndex,
+    findRecipeById,
     updateRecipe,
     search,
-    setSelectedRecipeIndex
+    setSelectedRecipeId
   }
 
   function createRecipe()
@@ -44,27 +44,25 @@ function App()
       servings:0,
       cookTime:'',
       instructions:'',
-      ingredients:
-      [
-        {
-          id:uuidv4(),
-          name:'',
-          amount:''
-        }
-      ],
+      ingredients:[],
       people:[]
     }
 
+    findRecipeById(newRecipe.id)
     setRecipes([...recipes,newRecipe])
   }
+
   function removeRecipe(id)
   {
+    if(selectedRecipeId!==null && selectedRecipeId===id)setSelectedRecipeId(undefined)
     setRecipes(prev=>prev.filter(recipe=>recipe.id!==id))
   }
-  function findRecipeIndex(id)
+
+  function findRecipeById(id)
   {
-    setSelectedRecipeIndex(recipes.findIndex(recipe=>recipe.id===id))
+    setSelectedRecipeId(id)
   }  
+
   function updateRecipe(id,recipe)
   {
      const newRecipes = [...recipes];
@@ -80,17 +78,16 @@ function App()
   return (
     <appContext.Provider value={contextValues}>
       <Header />
-      <main className="flex relative items-start pt-[12rem] px-[1rem] pb-[2rem]">
-        <div className="flex-1">
-          {
-            recipes.map((recipe) => 
-            {
-              if(!recipe.name.includes(searchParams))return
-              return <Recipe key={recipe.id} {...recipe} />
-            })
-          }
+      <main className="flex w-[100rem] max-w-[100%] mx-auto my-0 relative items-start pt-[12rem] px-[1rem] pb-[2rem]">
+        <div className="flex w-[100%] gap-[1rem] items-stretch">
+          <div className="flex-1">
+            {recipes.map((recipe) => {
+              if (!recipe.name.includes(searchParams)) return;
+              return <Recipe key={recipe.id} {...recipe} />;
+            })}
+          </div>
+          {selectedRecipe && <EditRecipe selectedRecipe={selectedRecipe} />}
         </div>
-        {selectedRecipe && <EditRecipe selectedRecipe={selectedRecipe} />} 
       </main>
     </appContext.Provider>
   );
